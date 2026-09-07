@@ -129,9 +129,8 @@ holdings at today's prices. That amber badge exists to keep reminding you. This 
 most common way a tool like this misleads someone.
 
 **Know exactly what goes out.** Not "it's private" — the actual list. Open the 🔒
-**Limits** tab once it is running, and read the *Network calls* section of
-`TRACKER.md`. Both spell out every outbound request, what parameters go with it, and
-what a price provider can still infer from it. Then judge it yourself.
+**Limits** tab once it is running. It spells out every outbound request, what parameters
+go with it, and what a price provider can still infer from it. Then judge it yourself.
 
 Read section 1 of `START-PROMPT.txt`. Those rules are the real assignment:
 
@@ -145,7 +144,8 @@ Read section 1 of `START-PROMPT.txt`. Those rules are the real assignment:
 Check it yourself once it is running:
 
 ```bash
-netstat -ano | findstr 8787
+lsof -i :8787          # macOS / Linux
+netstat -ano | findstr 8787   # Windows
 ```
 
 You should see `127.0.0.1:8787` and never `0.0.0.0`. Then try opening it from your
@@ -172,10 +172,12 @@ record.
 
 ## Using your own portfolio afterwards
 
-You can, and the tracker is built for it — but **read `SHARING.md` first**. The moment
-you drop in a real export, this folder stops being safe to share, and you need to
-delete every `!` line in `.gitignore`. Never email the file to yourself or paste it
-into a chat window.
+You can, and the tracker is built for it. Know what changes the moment you do: once a
+real export sits in this folder, the folder stops being safe to share. Delete the demo
+CSV so the two cannot be confused, check that your own file is covered by the
+`.gitignore` the build wrote for you, and never push the project to GitHub. Never email
+the file to yourself or paste it into a chat window either — both leave copies you no
+longer control.
 
 ---
 
@@ -188,7 +190,7 @@ into a chat window.
 | `TRACKER-DESIGN.md` | Exactly how it should look: colours, layout, tab order. |
 | `FEATURE-MENU.md` | The optional features, in plain English. |
 | `demo-holdings-2026-08-10_ALEX.csv` | The fake portfolio. Fictional people, `DEMO-` account numbers. |
-| `TRACKER.md` | What the finished tracker does, and precisely what leaves your machine. |
-| `SHARING.md` | What reproduces, what doesn't, and how to pass this on. |
-| `.gitignore` | Keeps real financial data out of git, if you ever use it. |
-| `reference/` | A finished version, plus a note on the one rule it deliberately breaks. **Try not to open it until yours works.** |
+
+The build writes one more file into your folder: a `.gitignore` that keeps real financial
+data out of git. What leaves your machine is documented in the project's own README and
+in the 🔒 Limits tab of the running dashboard.
