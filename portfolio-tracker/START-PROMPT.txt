@@ -1,0 +1,143 @@
+PASTE EVERYTHING BELOW THIS LINE INTO CLAUDE CODE
+==============================================================
+
+Provided free and as-is, with no warranty of any kind. Not financial, tax, or
+legal advice. You are responsible for reviewing whatever your AI tool builds
+from this, and for any decisions you make using it. Your broker is the system
+of record.
+
+--------------------------------------------------------------
+
+I want you to build me a personal portfolio dashboard that runs entirely on my own
+computer.
+
+Before you write anything, interview me. Ask two or three questions at a time, wait
+for my answers, and don't assume defaults for anything I haven't answered. If I say
+"you pick," choose something sensible and tell me what you picked and why. Build
+nothing until the questions run out.
+
+
+## 1. Non-negotiable privacy rules
+
+Hard constraints on the code you write. Put them verbatim in a comment block at the
+top of the main file, and don't violate them in any later edit.
+
+1. My financial data — holdings, quantities, book cost, market value, profit,
+   account names and numbers, owner names — must NEVER be transmitted off this
+   device. It is only ever read from local files and rendered locally.
+2. The ONLY outbound network calls are price lookups, and they may send ONLY ticker
+   symbols. Confine every network call to two clearly named functions, so there is a
+   single auditable boundary. No other function anywhere touches the network.
+3. The web server binds to 127.0.0.1 only — never 0.0.0.0, never a LAN IP. No
+   authentication is needed precisely because nothing outside this machine can
+   connect. Don't add "just expose it for convenience" anywhere.
+4. The generated HTML references no external resource — no CDN scripts, no web
+   fonts, no remote images, no iframes — and contains zero analytics or telemetry.
+   All CSS and JS inlined, so my browser makes no third-party requests either.
+5. Include a hard --offline flag (and an env var) that stops ALL network calls and
+   falls back to the prices in my file. Say plainly in the README that the flag
+   governs this tracker only, not other software on the computer.
+6. Write a .gitignore that excludes my data files and caches, and tell me plainly
+   not to push this project to GitHub. If I ask you to later, warn me again first.
+7. You are an online service: don't read my holdings file unless I point you at it,
+   and never copy its numbers into logs, tests, or examples. If I give you sample
+   rows instead of the real file, work only from those.
+
+
+## 2. Interview me
+
+Start here, because it changes everything after it:
+
+- Am I starting with just a watchlist — ticker symbols only, no holdings, no dollar
+  amounts — or with my holdings file? If watchlist-only, skip the file questions,
+  ask which symbols I want, and build the watchlist, prices and alerts first. Every
+  rule in Section 1 applies either way.
+
+If I have a file, don't guess its shape. Ask me to paste the header row, or to drop
+the file in this folder so you can read the columns yourself. If I'd rather you
+never read the real file, take the headings plus two or three made-up rows and build
+the import so swapping in the real file needs no code change. Map the columns
+explicitly, then show me the mapping so I can correct it.
+
+Then ask what you need to about, roughly in this order — a few at a time, in your
+own words:
+
+- MY DATA — which accounts and people; whether any account appears in two files and
+  must be counted once; which currencies and which one I want totals in; anything
+  with no public ticker (cash, GICs, a pension).
+- MY GOALS — the ONE question I want answered every morning; what I'm tracking
+  toward, if anything; the benchmark I care about; whether the big number at the top
+  is today's move or gain since I bought; whether I want price alerts, and on what.
+- PRACTICAL — my OS and whether Python is installed (check, don't assume); how often
+  prices refresh; whether I'm going to screen-record this, in which case build a
+  demo mode that swaps in fake names and hides totals.
+
+
+## 3. What to build
+
+One local web dashboard, served on localhost, that opens my browser on launch.
+Prioritise by my answers above. The core:
+
+- OVERVIEW — total value, gain/loss against book cost, today's move in dollars and
+  percent, and a ranking of which positions drove today's move by DOLLAR impact
+  (share count x today's per-share change), not just percent.
+- ACCOUNTS — per-account and per-owner, joint accounts counted once.
+- POSITIONS — symbol, shares, book cost, price, market value, gain/loss, sortable.
+- HISTORY — value over time, saved locally so it accumulates as I run it.
+- BENCHMARK — my portfolio against whatever I named.
+- LAGGARDS — what I'm currently down on, gathered so I look at it deliberately.
+- WATCHLIST + ALERTS — if I asked for them.
+- SHUT DOWN WITH THE PAGE — when I close the tab, the server notices and exits, so a
+  closed tracker never lingers. A refresh or a second tab must not kill it.
+
+Cache slow-moving data (analyst ratings, earnings dates) locally and refresh at most
+once a day, so I'm not hammering the price provider.
+
+LOOK AND FEEL: if TRACKER-DESIGN.md is in this folder, follow it exactly. If not,
+ask me; if I don't care, keep it dark, flat and calm — no gradients, no stock
+images.
+
+MORE FEATURES: if FEATURE-MENU.md is in this folder, read it AFTER the core works,
+show me the list, and ask which I want. Build only what I pick — unless I say "all".
+
+
+## 4. Tell me the truth about limits
+
+Before I rely on this, print an honest summary — in the chat AND on the dashboard
+itself — of what it can do, and then all of this plainly:
+
+- It is NOT investment advice. It reports numbers; nothing it ranks is a suggestion
+  to buy or sell.
+- It is NOT tax software. No adjusted cost base, no superficial-loss rules, nothing
+  I can file. Book values come from my file and may not match what the tax authority
+  expects.
+- Prices may be delayed, wrong, or missing for a given ticker.
+- It cannot place trades and has no connection to my broker. It never modifies my
+  file; the only files it writes are its own local ones.
+- It does not auto-sync. When I buy or sell, my numbers are stale until I update it.
+  Say this loudly — it's the most common way a tracker like this misleads.
+- Dividends, splits and corporate actions only show up if my file already has them.
+- Multi-currency totals are approximate and depend on when the FX rate was pulled.
+- Alerts only fire while the page is open. This is not a notification service.
+- The free price provider is an unofficial, unsupported interface with no SLA. When
+  it breaks, degrade gracefully and label stale or missing data rather than showing a
+  wrong number. Name the provider you chose and tell me to check its terms for my own
+  use, since I'm the one making the calls.
+- It is NOT a system of record. My broker is. If the two disagree, the broker wins.
+
+
+## 5. Tell me exactly what leaves my computer
+
+Write a short "Network calls" section in the README listing precisely: every
+external host contacted and by which library; every distinct call and what goes out
+with it; an explicit list of what is NEVER sent; what the provider can still infer
+(my IP, and which tickers I look up — which roughly reveals what I hold, even though
+quantities and dollar values never leave); and how I can verify all of it myself.
+
+Keep that section accurate as the code changes.
+
+
+## 6. Then run it
+
+Install what's needed, launch it, confirm it really is listening on 127.0.0.1 and
+nothing else, open my browser, and walk me through each tab once.
