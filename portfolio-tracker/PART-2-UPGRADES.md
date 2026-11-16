@@ -20,6 +20,8 @@ first one. These are the asks that started each page, not a recipe for an identi
 Show me which holding moved my money the most today, in dollars.
 ```
 
+This one came with Part 1's starting prompt. It is shown again in the video because the List page behind it is new, which is prompt 2.
+
 ### 2. Charts on every holding, watchlist groups (video at 1:47)
 
 ```
@@ -58,7 +60,7 @@ When I buy, sell, or add cash after the last export, let me tell you in plain wo
 On the goals page, add a chart for the current year only: the goal for this year, what the portfolio has actually done since the day I set it, and the pace it needs from here.
 ```
 
-### 8. Never lose the history file again
+### 8. Safer history saving and recovery
 
 ```
 Every time you save the history or any data file, write to a temporary file first and then swap it in, keep a backup copy, and if a file turns out corrupt on startup, recover from the backup and tell me.
@@ -78,14 +80,14 @@ When comparing my holdings to a benchmark, start both lines on the same day and 
 
 ### 11. The AI Money Trail page
 
-Its prompt is long and has its own data file, so it lives in its own repo:
+Its prompt is long, so it lives in its own repo (the prompt builds the page's data file):
 https://github.com/promptingtoprod/ai-money-trail. Answer "a tab in my project" to its first question to get it
 as a page inside the tracker.
 
 ## Left out on purpose
 
-A market mood gauge, a 0 to 100 stock rating and a buy or sell card exist in my copy. They read as advice,
-so they are hidden in the version shown and there is no prompt for them here.
+A market mood gauge and a 0 to 100 stock rating exist in my copy. They read as advice, so they are hidden in
+the version shown and there is no prompt for them here.
 
 ## Please read
 
